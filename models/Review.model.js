@@ -7,27 +7,25 @@ const reviewSchema = new Schema({
         type: String,
         required: true,
     },
-
+    description: {
+        type: String,
+    },
     classId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Class",
 
     },
-
     ranking: {
         type: Number,
         Min: 1,
         Max: 10,
         required: true,
-
-    },
-    image: {
-        type: String,
-        required: true,
-    },
-    description: {
-        type: String,
     }
+    //image: {
+       //type: String,
+       // required: true,
+  //  },
+
 })
 
 const Review = model("Review", reviewSchema)

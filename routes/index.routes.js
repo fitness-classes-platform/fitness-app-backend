@@ -99,10 +99,10 @@ router.post("/review", isAuthenticated, (req, res, next) => {
   })
 });
 
-router.delete("/review/:reviewId", isAuthenticated, (req, res, next) => {
+/*router.delete("/review/:reviewId", isAuthenticated, (req, res, next) => {
   const {reviewId} = req.params;
 
-  Review.findByIdAndDelete(reviewId)
+Review.findByIdAndDelete(reviewId)
   .then((deleteReview)=>{
     res.status(204).json(deleteReview)
   })
@@ -110,7 +110,7 @@ router.delete("/review/:reviewId", isAuthenticated, (req, res, next) => {
     res.status(500).json({ error: "Error deleting review" })
     next(error);
   })
-})
+})*/
 
 router.get("/review/:reviewId", (req, res, next) => {
   const {reviewId} = req.params;
@@ -126,7 +126,7 @@ router.get("/review/:reviewId", (req, res, next) => {
   })
 })
 
-router.put("/review/:reviewId", isAuthenticated, (req, res, next) => {
+/*router.put("/review/:reviewId", isAuthenticated, (req, res, next) => {
   const {reviewId} = req.params;
   const newDetails= req.body;
 
@@ -139,7 +139,7 @@ router.put("/review/:reviewId", isAuthenticated, (req, res, next) => {
     next(error);
   })
 
-})
+})*/
 
 
 
