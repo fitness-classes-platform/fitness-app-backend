@@ -11,17 +11,14 @@ location:{
         type: String,
         required: true,
 }, 
-ranking:{
-        type: Number,
-        required: true,
-}, 
+
 image:{
         type: String,
         required: true,
 },
 
 schedule:{
-        type: Date,
+        type: String,
         required: true,
 },
 difficulty:{
