@@ -10,6 +10,7 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 router.get("/class", (req, res, next) => {
   Class.find()
+  .populate("reviews")
   .then((classes)=>{
     res.status(200).json(classes)
   })
@@ -49,6 +50,7 @@ router.get("/class/:classId", (req, res, next) => {
   const {classId} = req.params;
 
   Class.findById(classId)
+  .populate("reviews")
   .then((findClass)=>{
     res.status(200).json(findClass)
   })
@@ -74,9 +76,8 @@ router.put("/class/:classId", isAuthenticated, (req, res, next) => {
 })
 
 // Review Routes
-router.get("/review", (req, res, next) => {
+router.get("/review/class/:classId", (req, res, next) => {
   Review.find()
-  .populate("class")
   .then((reviews)=>{
     res.status(200).json(reviews)
   })
@@ -86,10 +87,11 @@ router.get("/review", (req, res, next) => {
   })
 });
 
-router.post("/review", isAuthenticated, (req, res, next) => {
+router.post("/review/class/:classId", isAuthenticated, (req, res, next) => {
   const newReview= req.body;
+  const {classId}= req.params;
 
-  Review.create(newReview)
+  Review.findByIdAndUpdate(classId)
   .then((newReview)=>{
     res.status(201).json(newReview)
   })
@@ -116,7 +118,6 @@ router.get("/review/:reviewId", (req, res, next) => {
   const {reviewId} = req.params;
 
   Review.findById(reviewId)
-  .populate("class")
   .then((findReview)=>{
     res.status(200).json(findReview)
   })

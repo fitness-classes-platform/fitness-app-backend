@@ -10,15 +10,15 @@ const reviewSchema = new Schema({
     description: {
         type: String,
     },
-    classId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Class",
+//     classId: {
+//        type: mongoose.Schema.Types.ObjectId,
+//         ref: "Class",
 
-    },
+//    },
     ranking: {
         type: Number,
-        Min: 1,
-        Max: 10,
+        Min: 0,
+        Max: 5,
         required: true,
     }
     //image: {
