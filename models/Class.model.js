@@ -28,6 +28,12 @@ const classSchema = new Schema({
         },
         contacts: {
                 type: String,
+                validate: {
+                        validator: function (v) {
+                            return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v); // Example for email validation
+                        },
+                        message: (props) => `${props.value} is not a valid contact!`,
+                    },
         },
 
         reviews: [{
