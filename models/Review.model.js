@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const Class = require("./Class.model")
+const User = require("./User.model")
 const mongoose = require("mongoose");
 
 const reviewSchema = new Schema({
@@ -10,21 +10,22 @@ const reviewSchema = new Schema({
     description: {
         type: String,
     },
-//     classId: {
-//        type: mongoose.Schema.Types.ObjectId,
-//         ref: "Class",
 
-//    },
     ranking: {
         type: Number,
         Min: 0,
         Max: 5,
         required: true,
-    }
+    },
     //image: {
        //type: String,
        // required: true,
   //  },
+
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }
 
 })
 

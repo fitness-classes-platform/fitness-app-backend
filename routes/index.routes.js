@@ -78,6 +78,7 @@ router.put("/class/:classId", isAuthenticated, (req, res, next) => {
 // Review Routes
 router.get("/review/class/:classId", (req, res, next) => {
   Review.find()
+    .populate("user")
     .then((reviews) => {
       res.status(200).json(reviews)
     })
@@ -91,8 +92,8 @@ router.post("/review/class/:classId", isAuthenticated, (req, res, next) => {
   const { classId } = req.params;
   const { title, description, ranking } = req.body;
 
- 
-  Review.create({ title, description, ranking })
+
+  Review.create({ title, description, ranking, author: req.payload._id})
     .then((newReview) => {
       return Class.findByIdAndUpdate(
         classId,
@@ -110,22 +111,23 @@ router.post("/review/class/:classId", isAuthenticated, (req, res, next) => {
 });
 
 router.delete("/review/:reviewId", isAuthenticated, (req, res, next) => {
-  const {reviewId} = req.params;
+  const { reviewId } = req.params;
 
-Review.findByIdAndDelete(reviewId)
-  .then((deleteReview)=>{
-    res.status(204).json(deleteReview)
-  })
-  .catch((error) => {
-    res.status(500).json({ error: "Error deleting review" })
-    next(error);
-  })
+  Review.findByIdAndDelete(reviewId)
+    .then((deleteReview) => {
+      res.status(204).json(deleteReview)
+    })
+    .catch((error) => {
+      res.status(500).json({ error: "Error deleting review" })
+      next(error);
+    })
 })
 
 router.get("/review/:reviewId", (req, res, next) => {
   const { reviewId } = req.params;
 
   Review.findById(reviewId)
+    .populate("user")
     .then((findReview) => {
       res.status(200).json(findReview)
     })
@@ -136,17 +138,17 @@ router.get("/review/:reviewId", (req, res, next) => {
 })
 
 router.put("/review/:reviewId", isAuthenticated, (req, res, next) => {
-  const {reviewId} = req.params;
-  const newDetails= req.body;
+  const { reviewId } = req.params;
+  const newDetails = req.body;
 
-  Review.findByIdAndUpdate(reviewId, newDetails, {new:true})
-  .then((updateReview)=>{
-    res.status(200).json(updateReview)
-  })
-  .catch((error) => {
-    res.status(500).json({ error: "Error updating review" })
-    next(error);
-  })
+  Review.findByIdAndUpdate(reviewId, newDetails, { new: true })
+    .then((updateReview) => {
+      res.status(200).json(updateReview)
+    })
+    .catch((error) => {
+      res.status(500).json({ error: "Error updating review" })
+      next(error);
+    })
 
 })
 
