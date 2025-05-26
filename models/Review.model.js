@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const User = require("./User.model")
 const mongoose = require("mongoose");
 
 const reviewSchema = new Schema({
@@ -10,25 +9,23 @@ const reviewSchema = new Schema({
     description: {
         type: String,
     },
-
     ranking: {
         type: Number,
-        Min: 0,
-        Max: 5,
+        min: 0,
+        max: 5,
         required: true,
     },
-    //image: {
-       //type: String,
-       // required: true,
-  //  },
-
+    image: {
+        type: String,
+    },
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     }
+}, {
+    timestamps: true
+});
 
-})
-
-const Review = model("Review", reviewSchema)
+const Review = model("Review", reviewSchema);
 
 module.exports = Review;

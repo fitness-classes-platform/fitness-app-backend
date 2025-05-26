@@ -4,6 +4,7 @@ const router = express.Router();
 const Class = require("../models/Class.model")
 const Review = require("../models/Review.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
+const fileUploader = require("../config/cloudinary.config");
 
 
 // Class routes
@@ -75,10 +76,15 @@ router.put("/class/:classId", isAuthenticated, (req, res, next) => {
 
 })
 
+
+
+
+
+
 // Review Routes
 router.get("/review/class/:classId", (req, res, next) => {
   Review.find()
-    .populate("user")
+    .populate("author")
     .then((reviews) => {
       res.status(200).json(reviews)
     })
@@ -90,10 +96,9 @@ router.get("/review/class/:classId", (req, res, next) => {
 
 router.post("/review/class/:classId", isAuthenticated, (req, res, next) => {
   const { classId } = req.params;
-  const { title, description, ranking } = req.body;
+  const { title, description, ranking, image } = req.body;
 
-
-  Review.create({ title, description, ranking, author: req.payload._id})
+  Review.create({ title, description, ranking, image, author: req.payload._id})
     .then((newReview) => {
       return Class.findByIdAndUpdate(
         classId,
@@ -109,6 +114,25 @@ router.post("/review/class/:classId", isAuthenticated, (req, res, next) => {
       res.status(500).json({ error: "Failed to add review" });
     });
 });
+
+
+
+router.post("/upload", fileUploader.single("image"), (req, res, next) => {
+  // console.log("file is: ", req.file)
+ 
+  if (!req.file) {
+    next(new Error("No file uploaded!"));
+    return;
+  }
+  
+  // Get the URL of the uploaded file and send it as a response.
+  // 'fileUrl' can be any name, just make sure you remember to use the same when accessing it on the frontend
+  
+  res.json({ fileUrl: req.file.path });
+});
+
+
+
 
 router.delete("/review/:reviewId", isAuthenticated, (req, res, next) => {
   const { reviewId } = req.params;
@@ -127,7 +151,7 @@ router.get("/review/:reviewId", (req, res, next) => {
   const { reviewId } = req.params;
 
   Review.findById(reviewId)
-    .populate("user")
+    .populate("author")
     .then((findReview) => {
       res.status(200).json(findReview)
     })
