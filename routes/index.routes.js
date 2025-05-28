@@ -21,18 +21,29 @@ router.get("/class", (req, res, next) => {
     })
 });
 
-router.post("/class", (req, res, next) => {
-  const newClass = req.body;
+router.post("/class", fileUploader.single("image"), (req, res, next) => {
+  const { name, location, schedule, difficulty, contacts } = req.body;
+
+  const newClass = {
+    name,
+    location,
+    schedule,
+    difficulty,
+    contacts,
+    image: req.file?.path || ""
+  };
 
   Class.create(newClass)
-    .then((newClass) => {
-      res.status(201).json(newClass)
+    .then((createdClass) => {
+      res.status(201).json(createdClass);
     })
     .catch((error) => {
-      res.status(500).json({ message: "Error creating new Class" })
+      console.error("Error creating new class", error);
+      res.status(500).json({ message: "Error creating new Class" });
       next(error);
-    })
+    });
 });
+
 
 router.delete("/class/:classId", isAuthenticated, (req, res, next) => {
   const { classId } = req.params;
@@ -61,20 +72,24 @@ router.get("/class/:classId", (req, res, next) => {
     })
 })
 
-router.put("/class/:classId", isAuthenticated, (req, res, next) => {
+router.put("/class/:classId", isAuthenticated, fileUploader.single("image"), (req, res, next) => {
   const { classId } = req.params;
   const newDetails = req.body;
 
+  if (req.file?.path) {
+    newDetails.image = req.file.path;
+  }
+
   Class.findByIdAndUpdate(classId, newDetails, { new: true })
-    .then((updateClass) => {
-      res.status(200).json(updateClass)
+    .then((updatedClass) => {
+      res.status(200).json(updatedClass);
     })
     .catch((error) => {
-      res.status(500).json({ error: "Error updating class" })
+      res.status(500).json({ error: "Error updating class" });
       next(error);
-    })
+    });
+});
 
-})
 
 
 
