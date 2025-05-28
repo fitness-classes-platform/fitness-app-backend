@@ -13,10 +13,7 @@ const app = express();
 
 // ✅ CORS configuration
 const cors = require("cors");
-const allowedOrigins = [
-    'http://localhost:5173',
-    'https://fitnessclassapp.netlify.app'
-  ];
+
 
 app.use(
     cors({
