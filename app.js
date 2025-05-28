@@ -18,7 +18,7 @@ require("./config")(app);
 const reviewsRoutes = require("./routes/reviews.routes");
 app.use("/api", reviewsRoutes);
 
-const classRoutes= require("./routes/class.routes");
+const classRoutes = require("./routes/class.routes");
 app.use("/api", classRoutes)
 
 const authRoutes = require("./routes/auth.routes");

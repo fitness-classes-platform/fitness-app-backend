@@ -24,7 +24,7 @@ router.post("/review/class/:classId", isAuthenticated, (req, res, next) => {
   const { classId } = req.params;
   const { title, description, ranking, image } = req.body;
 
-  Review.create({ title, description, ranking, image, author: req.payload._id})
+  Review.create({ title, description, ranking, image, author: req.payload._id })
     .then((newReview) => {
       return Class.findByIdAndUpdate(
         classId,
@@ -45,15 +45,15 @@ router.post("/review/class/:classId", isAuthenticated, (req, res, next) => {
 
 router.post("/upload", fileUploader.single("image"), (req, res, next) => {
   // console.log("file is: ", req.file)
- 
+
   if (!req.file) {
     next(new Error("No file uploaded!"));
     return;
   }
-  
+
   // Get the URL of the uploaded file and send it as a response.
   // 'fileUrl' can be any name, just make sure you remember to use the same when accessing it on the frontend
-  
+
   res.json({ fileUrl: req.file.path });
 });
 
@@ -105,7 +105,7 @@ router.put("/review/:reviewId", isAuthenticated, (req, res, next) => {
 router.get('/health', (req, res) => {
   // send ping to prevent inactivity on mongodb atlas
   mongoose.connection.db.admin().ping()
-    .then( () => {
+    .then(() => {
       res.status(200).json({
         status: 'ok',
         timestamp: new Date().toISOString()
